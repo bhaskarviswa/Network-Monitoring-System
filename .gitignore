@@ -50,5 +50,5 @@ Thumbs.db
 # Excel files (if you don't want to commit switch data)
 switches.xlsx
 
-# Kiro (optional - uncomment if you don't want to commit)
-# .kiro/
+# Kiro AI assistant files
+.kiro/
