@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Logs - Network Monitor{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <h1 class="page-title">System Logs</h1>
+    <div class="top-bar-actions">
+        <span class="status-badge" style="background: rgba(0, 245, 255, 0.1); border-color: rgba(0, 245, 255, 0.3);">
+            {{ logs|length }} entries
+        </span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Recent Activity</h2>
+        <button class="btn btn-small" onclick="location.reload()">Refresh</button>
+    </div>
+    
+    {% if logs %}
+    <div style="max-height: 600px; overflow-y: auto;">
+        {% for log in logs %}
+        <div class="alert-item {% if log.severity == 'critical' %}{% elif log.severity == 'warning' %}warning{% else %}info{% endif %}" 
+             style="margin-bottom: 0.5rem; border-radius: 8px;">
+            <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 0.5rem;">
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.3rem;">
+                        <span style="font-weight: 600; color: var(--text-primary);">
+                            {% if log.alert_type == 'connectivity' %}🔌
+                            {% elif log.alert_type == 'cpu' %}🖥️
+                            {% elif log.alert_type == 'memory' %}💾
+                            {% elif log.alert_type == 'interface' %}🌐
+                            {% else %}📊{% endif %}
+                            {{ log.switch.name }}
+                        </span>
+                        <span class="severity-{{ log.severity }}">{{ log.severity|upper }}</span>
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                        {{ log.message }}
+                    </div>
+                </div>
+                <div style="text-align: right; color: var(--text-secondary); font-size: 0.85rem;">
+                    <div>{{ log.timestamp.strftime('%Y-%m-%d') }}</div>
+                    <div>{{ log.timestamp.strftime('%H:%M:%S') }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem; color: var(--text-secondary);">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+        <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">No Logs Yet</h3>
+        <p>System activity will appear here as it occurs.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Log Statistics -->
+<div class="grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Log Summary</h2>
+        </div>
+        <div class="device-grid">
+            <div class="metric-item" style="background: rgba(255, 51, 102, 0.1); border-color: rgba(255, 51, 102, 0.2);">
+                <div class="metric-label">Critical</div>
+                <div class="metric-value" style="color: var(--accent-danger);">
+                    {{ logs|selectattr('severity', 'equalto', 'critical')|list|length }}
+                </div>
+            </div>
+            <div class="metric-item" style="background: rgba(255, 184, 0, 0.1); border-color: rgba(255, 184, 0, 0.2);">
+                <div class="metric-label">Warning</div>
+                <div class="metric-value" style="color: var(--accent-warning);">
+                    {{ logs|selectattr('severity', 'equalto', 'warning')|list|length }}
+                </div>
+            </div>
+            <div class="metric-item" style="background: rgba(0, 245, 255, 0.1); border-color: rgba(0, 245, 255, 0.2);">
+                <div class="metric-label">Info</div>
+                <div class="metric-value" style="color: var(--accent-primary);">
+                    {{ logs|selectattr('severity', 'equalto', 'info')|list|length }}
+                </div>
+            </div>
+            <div class="metric-item" style="background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.2);">
+                <div class="metric-label">Total</div>
+                <div class="metric-value" style="color: var(--accent-success);">{{ logs|length }}</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Recent Activity Types</h2>
+        </div>
+        <div style="padding: 1rem 0;">
+            {% set activity_types = logs|groupby('alert_type') %}
+            {% for alert_type, type_logs in activity_types %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--border);">
+                <span style="text-transform: capitalize;">{{ alert_type|replace('_', ' ') }}</span>
+                <span class="status-badge" style="background: rgba(0, 245, 255, 0.1);">{{ type_logs|list|length }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

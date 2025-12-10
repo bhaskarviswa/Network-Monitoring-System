@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Network Monitor{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <h1 class="page-title">Settings</h1>
+</div>
+
+<div class="grid-2">
+    <!-- Monitoring Settings -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Monitoring Configuration</h2>
+        </div>
+        <form id="monitoringSettings">
+            <div class="form-group">
+                <label for="polling_interval">Polling Interval (seconds)</label>
+                <input type="number" id="polling_interval" name="polling_interval" value="120" min="30" max="3600">
+            </div>
+            
+            <div class="form-group">
+                <label for="ssh_timeout">SSH Timeout (seconds)</label>
+                <input type="number" id="ssh_timeout" name="ssh_timeout" value="5" min="1" max="30">
+            </div>
+            
+            <div class="form-group">
+                <label for="cpu_threshold">CPU Alert Threshold (%)</label>
+                <input type="number" id="cpu_threshold" name="cpu_threshold" value="80" min="1" max="100">
+            </div>
+            
+            <div class="form-group">
+                <label for="memory_threshold">Memory Alert Threshold (%)</label>
+                <input type="number" id="memory_threshold" name="memory_threshold" value="80" min="1" max="100">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Save Monitoring Settings</button>
+        </form>
+    </div>
+    
+    <!-- Email Settings -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Email Notifications</h2>
+        </div>
+        <form id="emailSettings">
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="enable_email" name="enable_email" style="margin-right: 0.5rem;">
+                    Enable Email Alerts
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label for="smtp_server">SMTP Server</label>
+                <input type="text" id="smtp_server" name="smtp_server" placeholder="smtp.gmail.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="smtp_port">SMTP Port</label>
+                <input type="number" id="smtp_port" name="smtp_port" value="587">
+            </div>
+            
+            <div class="form-group">
+                <label for="smtp_username">SMTP Username</label>
+                <input type="email" id="smtp_username" name="smtp_username" placeholder="your-email@domain.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="smtp_password">SMTP Password</label>
+                <input type="password" id="smtp_password" name="smtp_password" placeholder="App password">
+            </div>
+            
+            <div class="form-group">
+                <label for="alert_emails">Alert Recipients (comma-separated)</label>
+                <input type="text" id="alert_emails" name="alert_emails" placeholder="admin1@domain.com, admin2@domain.com">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Save Email Settings</button>
+        </form>
+    </div>
+</div>
+
+<!-- System Information -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">System Information</h2>
+    </div>
+    <div class="device-grid">
+        <div class="metric-item">
+            <div class="metric-label">Application Version</div>
+            <div class="metric-value" style="font-size: 1rem;">v1.0.0</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-label">Database</div>
+            <div class="metric-value" style="font-size: 1rem;">SQLite</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-label">Python Version</div>
+            <div class="metric-value" style="font-size: 1rem;">3.12+</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-label">Framework</div>
+            <div class="metric-value" style="font-size: 1rem;">Flask</div>
+        </div>
+    </div>
+</div>
+
+<!-- Danger Zone -->
+<div class="card" style="border-color: rgba(255, 51, 102, 0.3);">
+    <div class="card-header">
+        <h2 class="card-title" style="color: var(--accent-danger);">Danger Zone</h2>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(255, 51, 102, 0.05); border-radius: 8px;">
+        <div>
+            <h4 style="color: var(--accent-danger); margin-bottom: 0.5rem;">Reset All Data</h4>
+            <p style="color: var(--text-secondary); margin: 0;">This will delete all switches, metrics, and alerts. This action cannot be undone.</p>
+        </div>
+        <button class="btn btn-danger" onclick="confirmReset()">Reset System</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('monitoringSettings').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Simulate saving settings
+    setTimeout(() => {
+        alert('Monitoring settings saved successfully!');
+    }, 500);
+});
+
+document.getElementById('emailSettings').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Simulate saving settings
+    setTimeout(() => {
+        alert('Email settings saved successfully!');
+    }, 500);
+});
+
+function confirmReset() {
+    if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
+        if (confirm('This will delete ALL switches, metrics, and alerts. Type "RESET" to confirm.')) {
+            const input = prompt('Type "RESET" to confirm:');
+            if (input === 'RESET') {
+                alert('System reset functionality would be implemented here.');
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

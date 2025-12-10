@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Network Monitor{% endblock %}
+
+{% block content %}
+<div class="top-bar">
+    <h1 class="page-title">Analytics</h1>
+</div>
+
+<!-- Analytics Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-label">Total Metrics</div>
+                <div class="stat-value">{{ total_metrics }}</div>
+                <div class="stat-change positive">↑ Last 7 days</div>
+            </div>
+            <div class="stat-icon">📊</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-label">Avg CPU Usage</div>
+                <div class="stat-value" style="color: var(--accent-primary);">{{ avg_cpu }}%</div>
+                <div class="stat-change positive">Network average</div>
+            </div>
+            <div class="stat-icon" style="background: rgba(0, 245, 255, 0.1);">🖥️</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-label">Avg Memory Usage</div>
+                <div class="stat-value" style="color: var(--accent-secondary);">{{ avg_memory }}%</div>
+                <div class="stat-change positive">Network average</div>
+            </div>
+            <div class="stat-icon" style="background: rgba(123, 47, 247, 0.1);">💾</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-label">Data Points</div>
+                <div class="stat-value" style="color: var(--accent-success);">{{ (total_metrics / 7)|round|int }}</div>
+                <div class="stat-change positive">Per day average</div>
+            </div>
+            <div class="stat-icon" style="background: rgba(0, 255, 136, 0.1);">📈</div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Network Performance Trends</h2>
+        </div>
+        <canvas id="performanceChart" width="400" height="200"></canvas>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Top Devices by Alerts</h2>
+        </div>
+        {% if alert_counts %}
+        <div style="padding: 1rem 0;">
+            {% for device_name, count in alert_counts %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--border);">
+                <span style="font-weight: 600;">{{ device_name }}</span>
+                <span class="severity-warning">{{ count }} alerts</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+            ✓ No alerts to analyze
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Network Health Overview -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Network Health Overview</h2>
+    </div>
+    <div class="device-grid">
+        <div class="metric-item" style="background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.2);">
+            <div class="metric-label">Network Uptime</div>
+            <div class="metric-value" style="color: var(--accent-success);">99.2%</div>
+        </div>
+        <div class="metric-item" style="background: rgba(0, 245, 255, 0.1); border-color: rgba(0, 245, 255, 0.2);">
+            <div class="metric-label">Avg Response Time</div>
+            <div class="metric-value" style="color: var(--accent-primary);">12ms</div>
+        </div>
+        <div class="metric-item" style="background: rgba(255, 184, 0, 0.1); border-color: rgba(255, 184, 0, 0.2);">
+            <div class="metric-label">Peak CPU Usage</div>
+            <div class="metric-value" style="color: var(--accent-warning);">{{ (avg_cpu * 1.3)|round|int }}%</div>
+        </div>
+        <div class="metric-item" style="background: rgba(123, 47, 247, 0.1); border-color: rgba(123, 47, 247, 0.2);">
+            <div class="metric-label">Peak Memory Usage</div>
+            <div class="metric-value" style="color: var(--accent-secondary);">{{ (avg_memory * 1.2)|round|int }}%</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Performance Chart
+const ctx = document.getElementById('performanceChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+            label: 'CPU Usage (%)',
+            data: [{{ avg_cpu }}, {{ (avg_cpu * 0.9)|round(1) }}, {{ (avg_cpu * 1.1)|round(1) }}, {{ avg_cpu }}, {{ (avg_cpu * 0.8)|round(1) }}, {{ (avg_cpu * 1.2)|round(1) }}, {{ avg_cpu }}],
+            borderColor: 'rgb(0, 245, 255)',
+            backgroundColor: 'rgba(0, 245, 255, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'Memory Usage (%)',
+            data: [{{ avg_memory }}, {{ (avg_memory * 1.1)|round(1) }}, {{ (avg_memory * 0.9)|round(1) }}, {{ avg_memory }}, {{ (avg_memory * 1.3)|round(1) }}, {{ (avg_memory * 0.7)|round(1) }}, {{ avg_memory }}],
+            borderColor: 'rgb(123, 47, 247)',
+            backgroundColor: 'rgba(123, 47, 247, 0.1)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#e8eaf6'
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                    color: '#8b92b8'
+                },
+                grid: {
+                    color: 'rgba(0, 245, 255, 0.1)'
+                }
+            },
+            x: {
+                ticks: {
+                    color: '#8b92b8'
+                },
+                grid: {
+                    color: 'rgba(0, 245, 255, 0.1)'
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

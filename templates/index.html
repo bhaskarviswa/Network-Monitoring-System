@@ -7,7 +7,8 @@
     <h1 class="page-title">Dashboard</h1>
     <div class="top-bar-actions">
         <div class="search-box">
-            <input type="text" placeholder="Search devices...">
+            <input type="text" placeholder="Search devices..." id="dashboardSearch">
+            <div id="searchResults" style="position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; max-height: 300px; overflow-y: auto; z-index: 1000; display: none;"></div>
         </div>
     </div>
 </div>
@@ -136,4 +137,69 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Dashboard search functionality
+const searchInput = document.getElementById('dashboardSearch');
+const searchResults = document.getElementById('searchResults');
+let searchTimeout;
+
+searchInput.addEventListener('input', function(e) {
+    const query = e.target.value.trim();
+    
+    clearTimeout(searchTimeout);
+    
+    if (query.length < 2) {
+        searchResults.style.display = 'none';
+        return;
+    }
+    
+    searchTimeout = setTimeout(() => {
+        fetch(`/api/search?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                displaySearchResults(data);
+            })
+            .catch(error => {
+                console.error('Search error:', error);
+            });
+    }, 300);
+});
+
+function displaySearchResults(results) {
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div style="padding: 1rem; color: var(--text-secondary);">No devices found</div>';
+    } else {
+        searchResults.innerHTML = results.map(device => `
+            <div style="padding: 1rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s;" 
+                 onclick="window.location.href='${device.url}'"
+                 onmouseover="this.style.background='rgba(0, 245, 255, 0.05)'"
+                 onmouseout="this.style.background='transparent'">
+                <div style="font-weight: 600; color: var(--text-primary);">${device.name}</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 1rem; margin-top: 0.3rem;">
+                    <span>${device.ip_address}</span>
+                    <span class="status-badge status-${device.status}" style="font-size: 0.7rem; padding: 0.2rem 0.6rem;">${device.status.toUpperCase()}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+    searchResults.style.display = 'block';
+}
+
+// Hide search results when clicking outside
+document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = 'none';
+    }
+});
+
+// Show search results when focusing on input
+searchInput.addEventListener('focus', function() {
+    if (searchResults.innerHTML && searchInput.value.length >= 2) {
+        searchResults.style.display = 'block';
+    }
+});
+</script>
 {% endblock %}

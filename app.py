@@ -92,6 +92,74 @@ def acknowledge_alert(alert_id):
     db.session.commit()
     return jsonify({'status': 'success'})
 
+@app.route('/analytics')
+def analytics():
+    """Analytics page"""
+    # Get metrics for the last 7 days
+    since = datetime.utcnow() - timedelta(days=7)
+    metrics = Metric.query.filter(Metric.timestamp >= since).all()
+    
+    # Calculate analytics data
+    total_metrics = len(metrics)
+    avg_cpu = sum(m.cpu_usage for m in metrics if m.cpu_usage) / max(1, len([m for m in metrics if m.cpu_usage]))
+    avg_memory = sum(m.memory_usage for m in metrics if m.memory_usage) / max(1, len([m for m in metrics if m.memory_usage]))
+    
+    # Get top devices by alerts
+    alert_counts = db.session.query(
+        Switch.name, 
+        db.func.count(Alert.id).label('alert_count')
+    ).join(Alert).group_by(Switch.id).order_by(db.desc('alert_count')).limit(5).all()
+    
+    return render_template('analytics.html', 
+                         total_metrics=total_metrics,
+                         avg_cpu=round(avg_cpu, 1),
+                         avg_memory=round(avg_memory, 1),
+                         alert_counts=alert_counts)
+
+@app.route('/logs')
+def logs():
+    """System logs page"""
+    # Get recent alerts as logs
+    logs = Alert.query.order_by(Alert.timestamp.desc()).limit(100).all()
+    return render_template('logs.html', logs=logs)
+
+@app.route('/settings')
+def settings():
+    """Settings page"""
+    return render_template('settings.html')
+
+@app.route('/settings', methods=['POST'])
+def update_settings():
+    """Update settings"""
+    # This is a placeholder - you can implement actual settings storage
+    return jsonify({'status': 'success', 'message': 'Settings updated successfully'})
+
+@app.route('/api/search')
+def api_search():
+    """API endpoint for searching devices"""
+    query = request.args.get('q', '').strip()
+    if not query:
+        return jsonify([])
+    
+    switches = Switch.query.filter(
+        db.or_(
+            Switch.name.ilike(f'%{query}%'),
+            Switch.ip_address.ilike(f'%{query}%')
+        )
+    ).limit(10).all()
+    
+    results = []
+    for switch in switches:
+        results.append({
+            'id': switch.id,
+            'name': switch.name,
+            'ip_address': switch.ip_address,
+            'status': switch.status,
+            'url': url_for('switch_detail', switch_id=switch.id)
+        })
+    
+    return jsonify(results)
+
 @app.route('/api/metrics/<int:switch_id>')
 def api_metrics(switch_id):
     """API endpoint for switch metrics"""

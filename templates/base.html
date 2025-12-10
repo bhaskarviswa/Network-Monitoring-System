@@ -36,19 +36,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" onclick="return false;">
+                    <a href="{{ url_for('analytics') }}" class="{% if request.endpoint == 'analytics' %}active{% endif %}">
                         <span class="icon">📈</span>
                         <span>Analytics</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" onclick="return false;">
+                    <a href="{{ url_for('logs') }}" class="{% if request.endpoint == 'logs' %}active{% endif %}">
                         <span class="icon">📝</span>
                         <span>Logs</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" onclick="return false;">
+                    <a href="{{ url_for('settings') }}" class="{% if request.endpoint == 'settings' %}active{% endif %}">
                         <span class="icon">⚙️</span>
                         <span>Settings</span>
                     </a>
