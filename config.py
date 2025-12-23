@@ -17,9 +17,9 @@ class Config:
     INTERFACE_ERROR_THRESHOLD = 100  # Interface errors count
     
     # Email notifications
-    ENABLE_EMAIL_ALERTS = False  # Set to True to enable email alerts
+    ENABLE_EMAIL_ALERTS = True
     SMTP_SERVER = 'smtp.gmail.com'
     SMTP_PORT = 587
-    SMTP_USERNAME = 'your-email@gmail.com'
-    SMTP_PASSWORD = 'your-app-password'
-    ALERT_EMAIL_TO = ['viswanathdevisetti789@gmail.com']  # List of email addresses to notify
+    SMTP_USERNAME = 'netmonitorcutmap@gmail.com'
+    SMTP_PASSWORD = 'ubqelzrmyjyjtgki'
+    ALERT_EMAIL_TO = ['netmonitorcutmap@gmail.com']

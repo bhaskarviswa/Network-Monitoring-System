@@ -54,9 +54,9 @@
         <div class="stat-header">
             <div>
                 <div class="stat-label">Active Alerts</div>
-                <div class="stat-value" style="color: var(--accent-warning);">{{ alerts|length }}</div>
-                <div class="stat-change {% if alerts|length > 0 %}negative{% else %}positive{% endif %}">
-                    {% if alerts|length > 0 %}↑ Requires review{% else %}✓ No issues{% endif %}
+                <div class="stat-value" style="color: var(--accent-warning);">{{ total_alerts }}</div>
+                <div class="stat-change {% if total_alerts > 0 %}negative{% else %}positive{% endif %}">
+                    {% if total_alerts > 0 %}↑ Requires review{% else %}✓ No issues{% endif %}
                 </div>
             </div>
             <div class="stat-icon" style="background: rgba(255, 184, 0, 0.1); border-color: rgba(255, 184, 0, 0.2);">🔔</div>

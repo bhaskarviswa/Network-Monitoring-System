@@ -45,15 +45,21 @@
         </div>
         <form id="emailSettings">
             <div class="form-group">
-                <label>
-                    <input type="checkbox" id="enable_email" name="enable_email" style="margin-right: 0.5rem;">
-                    Enable Email Alerts
-                </label>
+                <div style="display: flex; align-items: center; gap: 0.8rem; padding: 1rem; background: rgba(0, 245, 255, 0.05); border: 1px solid rgba(0, 245, 255, 0.2); border-radius: 8px;">
+                    <input type="checkbox" id="enable_email" name="enable_email" checked 
+                           style="width: 18px; height: 18px; accent-color: var(--accent-primary); cursor: pointer;">
+                    <label for="enable_email" style="margin: 0; cursor: pointer; font-weight: 600; color: var(--text-primary);">
+                        Enable Email Alerts
+                    </label>
+                </div>
+                <small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.5rem; display: block;">
+                    Get notified when switches go offline or have critical issues
+                </small>
             </div>
             
             <div class="form-group">
                 <label for="smtp_server">SMTP Server</label>
-                <input type="text" id="smtp_server" name="smtp_server" placeholder="smtp.gmail.com">
+                <input type="text" id="smtp_server" name="smtp_server" value="smtp.gmail.com">
             </div>
             
             <div class="form-group">
@@ -62,21 +68,30 @@
             </div>
             
             <div class="form-group">
-                <label for="smtp_username">SMTP Username</label>
-                <input type="email" id="smtp_username" name="smtp_username" placeholder="your-email@domain.com">
+                <label for="smtp_username">Gmail Address</label>
+                <input type="email" id="smtp_username" name="smtp_username" value="viswanathdevisetti789@gmail.com">
             </div>
             
             <div class="form-group">
-                <label for="smtp_password">SMTP Password</label>
-                <input type="password" id="smtp_password" name="smtp_password" placeholder="App password">
+                <label for="smtp_password">Gmail App Password</label>
+                <input type="password" id="smtp_password" name="smtp_password" placeholder="Enter your Gmail App Password">
+                <small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.3rem; display: block;">
+                    Get App Password: Google Account → Security → 2-Step Verification → App passwords
+                </small>
             </div>
             
             <div class="form-group">
-                <label for="alert_emails">Alert Recipients (comma-separated)</label>
-                <input type="text" id="alert_emails" name="alert_emails" placeholder="admin1@domain.com, admin2@domain.com">
+                <label for="alert_emails">Alert Recipients</label>
+                <input type="text" id="alert_emails" name="alert_emails" value="viswanathdevisetti789@gmail.com">
+                <small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.3rem; display: block;">
+                    Separate multiple emails with commas
+                </small>
             </div>
             
-            <button type="submit" class="btn btn-primary">Save Email Settings</button>
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">Save Email Settings</button>
+                <button type="button" class="btn" onclick="testEmail()">Send Test Email</button>
+            </div>
         </form>
     </div>
 </div>
@@ -125,21 +140,47 @@
 <script>
 document.getElementById('monitoringSettings').addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    // Simulate saving settings
-    setTimeout(() => {
-        alert('Monitoring settings saved successfully!');
-    }, 500);
+    alert('Monitoring settings saved successfully!');
 });
 
 document.getElementById('emailSettings').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Simulate saving settings
-    setTimeout(() => {
-        alert('Email settings saved successfully!');
-    }, 500);
+    const formData = new FormData(this);
+    
+    fetch('/settings', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('✅ ' + data.message);
+        } else {
+            alert('❌ Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        alert('❌ Error saving settings: ' + error);
+    });
 });
+
+function testEmail() {
+    fetch('/test-email', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('✅ ' + data.message);
+        } else {
+            alert('❌ ' + data.message);
+        }
+    })
+    .catch(error => {
+        alert('❌ Error testing email: ' + error);
+    });
+}
 
 function confirmReset() {
     if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {

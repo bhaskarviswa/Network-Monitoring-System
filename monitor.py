@@ -115,6 +115,8 @@ class NetworkMonitor:
     
     def create_alert(self, switch, alert_type, severity, message):
         """Create an alert if it doesn't already exist"""
+        print(f"🔔 Creating alert for {switch.name}: {alert_type} - {severity} - {message}")
+        
         # Check if similar unacknowledged alert exists
         existing = Alert.query.filter_by(
             switch_id=switch.id,
@@ -130,13 +132,26 @@ class NetworkMonitor:
                 message=message
             )
             db.session.add(alert)
+            print(f"📝 Alert added to database for {switch.name}")
             
             # Send email notification for critical alerts or connectivity issues
             if severity == 'critical' or alert_type == 'connectivity':
-                self.email_notifier.send_alert(
-                    switch.name,
-                    switch.ip_address,
-                    alert_type,
-                    severity,
-                    message
-                )
+                print(f"📧 Attempting to send email for {switch.name} - {alert_type}")
+                try:
+                    email_sent = self.email_notifier.send_alert(
+                        switch.name,
+                        switch.ip_address,
+                        alert_type,
+                        severity,
+                        message
+                    )
+                    if email_sent:
+                        print(f"✅ Email sent successfully for {switch.name}")
+                    else:
+                        print(f"❌ Email failed to send for {switch.name}")
+                except Exception as e:
+                    print(f"❌ Email error for {switch.name}: {str(e)}")
+            else:
+                print(f"ℹ️ No email sent for {switch.name} - severity: {severity}, type: {alert_type}")
+        else:
+            print(f"⚠️ Alert already exists for {switch.name} - {alert_type}")
