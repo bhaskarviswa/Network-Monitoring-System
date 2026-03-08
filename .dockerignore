@@ -1,0 +1,42 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Kiro AI files
+.kiro/
+
+# Database (will be mounted as volume)
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Excel files (optional - uncomment if you don't want to include)
+# switches.xlsx
+
+# Documentation
+README.md

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  network-monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Use Dockerfile.prod for production
+    container_name: network-monitoring-system
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount database directory to persist data
+      - ./instance:/app/instance
+      # Optional: Mount config for easy updates
+      - ./config.py:/app/config.py
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - monitoring-network
+
+networks:
+  monitoring-network:
+    driver: bridge
