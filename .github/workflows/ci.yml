@@ -26,3 +26,4 @@ jobs:
           docker ps
           docker logs test-container
           docker stop test-container
+          docker rm test-container
