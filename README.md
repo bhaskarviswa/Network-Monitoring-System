@@ -33,10 +33,10 @@ The system provides network administrators with:
 
 ##  System Architecture
 
-```
+
 <img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/bd1c1d17-b6e9-4fa5-b49d-5160f6d4443f" />
 
-```
+
 
 ##  Technology Stack
 
@@ -221,37 +221,37 @@ open http://localhost:5000
 ##  Screenshots
 
 ### Dashboard UI
-```
+
 <img width="1881" height="871" alt="Dashboard#1" src="https://github.com/user-attachments/assets/283046e1-6697-466f-87e9-1ee73f77ad61" />
 <img width="1896" height="855" alt="Screenshot 2026-02-02 095950" src="https://github.com/user-attachments/assets/15879fa0-d111-4b24-b0fe-3bfda6442e88" />
 <img width="1889" height="861" alt="Screenshot 2026-02-02 100003" src="https://github.com/user-attachments/assets/67d2142c-bf50-430b-b548-f8f156928606" />
 
-```
+
 
 ### Docker Container Running
-```
+
 <img width="1585" height="612" alt="image" src="https://github.com/user-attachments/assets/78df23b9-9e0d-437c-9a97-640cc9c48900" />
 
-```
+
 
 ### AWS Deployment
-```
+
 <img width="1902" height="763" alt="Screenshot 2026-03-10 120244" src="https://github.com/user-attachments/assets/dbc5a921-23a1-4c5b-8879-ff2c726f7cb8" />
 
-```
+
 
 ### GitHub Actions Pipeline
-```
+
 <img width="1892" height="896" alt="Screenshot 2026-03-10 120625" src="https://github.com/user-attachments/assets/e38b3865-00b4-49d0-841c-e9415e5d2c3c" />
 
-```
+
 
 ### Email Alerts
-```
+
 <img width="937" height="584" alt="image" src="https://github.com/user-attachments/assets/1cd1e842-9d52-4764-8a72-a4dcbe170c5b" />
 
 
-```
+
 ##  Future Improvements
 
 - [ ] **Enhanced Alert Notifications**
