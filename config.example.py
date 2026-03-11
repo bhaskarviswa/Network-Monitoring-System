@@ -21,8 +21,8 @@ class Config:
     # For Gmail: Use App Password (not your regular password)
     # Generate App Password: https://myaccount.google.com/apppasswords
     ENABLE_EMAIL_ALERTS = False  # Set to True after configuring email settings
-    SMTP_SERVER = 'smtp.gmail.com'
-    SMTP_PORT = 587
-    SMTP_USERNAME = ''  # Your email address
-    SMTP_PASSWORD = ''  # Your Gmail App Password
-    ALERT_EMAIL_TO = []  # List of email addresses to receive alerts
+    SMTP_SERVER = 'smtp.gmail.com'  # For Gmail
+    SMTP_PORT = 587  # For Gmail with TLS
+    SMTP_USERNAME = 'your-email@gmail.com'  # Your email address
+    SMTP_PASSWORD = 'your-app-password-here'  # Your Gmail App Password (16 characters)
+    ALERT_EMAIL_TO = ['admin@example.com', 'team@example.com']  # List of email addresses to receive alerts
