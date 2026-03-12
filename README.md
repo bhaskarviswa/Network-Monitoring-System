@@ -279,8 +279,8 @@ open http://localhost:5000
 
 ##  Author
 
-**Bhaskar Viswanath**
-- GitHub: [@bhaskarviswa](https://github.com/bhaskarviswa)
+**Bhaskar Viswanadh**
+- GitHub: [@bhaskarviswanadh](https://github.com/bhaskarviswanadh)
 - Project: [Network-Monitoring-System](https://github.com/bhaskarviswa/Network-Monitoring-System)
 
 ---
