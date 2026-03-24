@@ -144,7 +144,7 @@ The application is deployed using Docker Compose for easy management and scalabi
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/bhaskarviswa/Network-Monitoring-System.git
+git clone https://github.com/bhaskarviswanadh/Network-Monitoring-System.git
 cd Network-Monitoring-System
 ```
 
@@ -171,7 +171,7 @@ http://YOUR_VM_IP:5000
 **Quick Start:**
 ```bash
 # Clone the repository
-git clone https://github.com/bhaskarviswa/Network-Monitoring-System.git
+git clone https://github.com/bhaskarviswanadh/Network-Monitoring-System.git
 cd Network-Monitoring-System
 
 # Build and run with Docker Compose
@@ -281,7 +281,7 @@ open http://localhost:5000
 
 **Bhaskar Viswanadh**
 - GitHub: [@bhaskarviswanadh](https://github.com/bhaskarviswanadh)
-- Project: [Network-Monitoring-System](https://github.com/bhaskarviswa/Network-Monitoring-System)
+- Project: [Network-Monitoring-System](https://github.com/bhaskarviswanadh/Network-Monitoring-System)
 
 ---
 
